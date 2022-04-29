@@ -16,7 +16,7 @@ async fn main() -> Result<(), Box<dyn std::error::Error>> {
     // https://rustdocs.bsx.fi/pallet_asset_registry/pallet/struct.Pallet.html#method.assets (I think!)
     let asset_details = api.storage().asset_registry().assets(&0, None).await?;
 
-    // asset_details = 
+    // asset_details =
     // {
     //   name: BSX
     //   assetType: Token
@@ -31,10 +31,23 @@ async fn main() -> Result<(), Box<dyn std::error::Error>> {
     // This struct seems to not behave in the same as other BoundedVec<T>'s and its unclear which version this explictly is.
     // My current thoughts are that this is generated as part of the subxt metadata extract and that it is incorrect/incomplete.
 
-    println!("{:?}", asset_name); // -> BoundedVec([66, 83, 88])
+    println!("Asset response:\t\t{:?}", asset_name); // -> BoundedVec([66, 83, 88])
+
+    let slice = asset_name.0;
+    println!("Extracted slice(?):\t{:?}", slice);
+
+    let iter = slice.iter();
+
+    let mut asset_name_pretty = String::from("");
+
+    for s in iter {
+        println!("\nThis iteration char:\t{}", (*s as char).to_string());
+        asset_name_pretty += &(*s as char).to_string();
+        println!("String being built:\t{}", asset_name_pretty);
+    }
 
     // How can you convert BoundedVec<u8> to char to String/&str so that
-    // println!("{}", asset_name_pretty) -> "BSX"
+    println!("\nFinal string:\t\t{}", asset_name_pretty); // -> "BSX"
 
     Ok(())
 }
