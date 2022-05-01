@@ -33,21 +33,23 @@ async fn main() -> Result<(), Box<dyn std::error::Error>> {
 
     println!("Asset response:\t\t{:?}", asset_name); // -> BoundedVec([66, 83, 88])
 
-    let slice = asset_name.0;
-    println!("Extracted slice(?):\t{:?}", slice);
+    let inner_vec = asset_name.0;
+    println!("Extracted slice(?):\t{:?}", inner_vec);
 
-    let iter = slice.iter();
+    let iter = inner_vec.iter();
 
     let mut asset_name_pretty = String::from("");
 
-    for s in iter {
-        println!("\nThis iteration char:\t{}", (*s as char).to_string());
-        asset_name_pretty += &(*s as char).to_string();
+    for c in iter {
+        println!("\nThis iteration char:\t{}", (*c as char).to_string());
+        asset_name_pretty += &(*c as char).to_string();
         println!("String being built:\t{}", asset_name_pretty);
     }
 
-    // How can you convert BoundedVec<u8> to char to String/&str so that
-    println!("\nFinal string:\t\t{}", asset_name_pretty); // -> "BSX"
+    println!("\nFinal string (builder):\t\t{}", asset_name_pretty); // -> "BSX"
+
+    // A much cleaner vec u8 -> str
+    println!("Final string (from_utf8):\t{}", std::str::from_utf8(&inner_vec).unwrap());
 
     Ok(())
 }
